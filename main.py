@@ -10,7 +10,9 @@ from datetime import datetime
 import smtplib, ssl
 from os import environ
 
-driver = webdriver.Chrome()
+chrome_options = webdriver.ChromeOptions();
+chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
+driver = webdriver.Chrome(options=chrome_options);
 
 class two_or_more_elements(object):
     def __init__(self, tag):
