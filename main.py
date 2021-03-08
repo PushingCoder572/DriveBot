@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
@@ -10,9 +11,11 @@ from datetime import datetime
 import smtplib, ssl
 from os import environ
 
-chrome_options = webdriver.ChromeOptions();
-chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
-driver = webdriver.Chrome(options=chrome_options);
+chrome_options = ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Chrome(options=chrome_options)
 
 class two_or_more_elements(object):
     def __init__(self, tag):
@@ -94,5 +97,6 @@ if __name__ == '__main__':
                 file.truncate()
                 file.write(tidigaste[0].strftime("%Y-%m-%d %H:%M"))
 
+        iterations += 1
         sleep(60)
 
