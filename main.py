@@ -11,11 +11,11 @@ from datetime import datetime
 import smtplib, ssl
 from os import environ
 
-chrome_options = ChromeOptions()
+"""chrome_options = ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome(options=chrome_options)
+chrome_options.add_argument('--disable-dev-shm-usage')"""
+driver = webdriver.Chrome()
 
 
 class two_or_more_elements(object):
@@ -93,7 +93,6 @@ if __name__ == '__main__':
                 elif date_tid < tidigaste[0]:
                     tidigaste = [date_tid, plats]
 
-            driver.quit()
             file.seek(0)
             if tidigaste[0] < datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"):
                 send_email(tidigaste)
@@ -105,4 +104,6 @@ if __name__ == '__main__':
 
         iterations += 1
         sleep(60)
+
+    driver.quit()
 
