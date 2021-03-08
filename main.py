@@ -82,20 +82,25 @@ if __name__ == '__main__':
     iterations = 0
     while iterations < 10000:
         with open("tid", "r+") as file:
-            tidigaste = [datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"), 0]
+            tidigaste = 0
 
             for i in ["Sollentuna", "Farsta", "Uppsala"]:
                 tid, plats = main(i)
                 date_tid = datetime.strptime(tid.strip(), "%Y-%m-%d %H:%M")
-                if date_tid < tidigaste[0]:
+                if tidigaste == 0:
+                    tidigaste = [date_tid, plats]
+                elif date_tid < tidigaste[0]:
                     tidigaste = [date_tid, plats]
 
-            file.seek(0)
             driver.quit()
+            file.seek(0)
             if tidigaste[0] < datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"):
                 send_email(tidigaste)
                 file.truncate()
                 file.write(tidigaste[0].strftime("%Y-%m-%d %H:%M"))
+                print("WIN", tidigaste[0])
+            else:
+                print("FAIL", tidigaste[0])
 
         iterations += 1
         sleep(60)
