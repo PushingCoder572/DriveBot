@@ -12,7 +12,6 @@ from os import environ
 
 driver = webdriver.Chrome()
 
-
 class two_or_more_elements(object):
     def __init__(self, tag):
         self.tag = tag
@@ -80,7 +79,7 @@ if __name__ == '__main__':
         with open("tid", "r+") as file:
             tidigaste = [datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"), 0]
 
-            for i in ["Sollentuna", "Farsta", "Järfälla", "Uppsala"]:
+            for i in ["Sollentuna", "Farsta", "Uppsala"]:
                 tid, plats = main(i)
                 date_tid = datetime.strptime(tid.strip(), "%Y-%m-%d %H:%M")
                 if date_tid < tidigaste[0]:
@@ -92,4 +91,6 @@ if __name__ == '__main__':
                 send_email(tidigaste)
                 file.truncate()
                 file.write(tidigaste[0].strftime("%Y-%m-%d %H:%M"))
+
+        sleep(60)
 
