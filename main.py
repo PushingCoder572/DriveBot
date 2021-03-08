@@ -10,9 +10,7 @@ from datetime import datetime
 import smtplib, ssl
 from os import environ
 
-
-PATH = environ.get("WEBDRIVER_PATH")
-driver = webdriver.Chrome(PATH)
+driver = webdriver.Chrome()
 
 
 class two_or_more_elements(object):
