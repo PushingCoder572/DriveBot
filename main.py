@@ -17,6 +17,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(options=chrome_options)
 
+
 class two_or_more_elements(object):
     def __init__(self, tag):
         self.tag = tag
@@ -98,9 +99,9 @@ if __name__ == '__main__':
                 send_email(tidigaste)
                 file.truncate()
                 file.write(tidigaste[0].strftime("%Y-%m-%d %H:%M"))
-                print("WIN", tidigaste[0])
+                print("WIN", tidigaste[0].strftime("%Y-%m-%d %H:%M"))
             else:
-                print("FAIL", tidigaste[0])
+                print("FAIL", tidigaste[0].strftime("%Y-%m-%d %H:%M"))
 
         iterations += 1
         sleep(60)
