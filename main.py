@@ -18,6 +18,9 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(options=chrome_options)
 
 
+locations = ["Sollentuna".encode(), "Farsta".encode(), "Järfälla".encode(), "Uppsala".encode(), "Södertälje".encode()]
+
+
 class two_or_more_elements(object):
     def __init__(self, tag):
         self.tag = tag
@@ -69,7 +72,7 @@ HEJ DETTA E ETT MEDDELANDE ATT JAG HITTAT EN NY TID {} i {}."""
 
 def send_email(info):
     port = 465  # For SSL
-    password = environ.get("EMAIL_PASS")
+    password = str(environ.get("EMAIL_PASS")).strip()
 
     # Create a secure SSL context
     context = ssl.create_default_context()
@@ -81,29 +84,32 @@ def send_email(info):
 
 if __name__ == '__main__':
     iterations = 0
-    while iterations < 10000:
+    while iterations < 5:
         with open("tid", "r+") as file:
-            tidigaste = 0
 
-            for i in ["Sollentuna", "Farsta", "Uppsala"]:
-                tid, plats = main(i)
+            pepehandslist = []
+            for location in locations:
+                tid, plats = main(location.decode())
                 date_tid = datetime.strptime(tid.strip(), "%Y-%m-%d %H:%M")
-                if tidigaste == 0:
-                    tidigaste = [date_tid, plats]
-                elif date_tid < tidigaste[0]:
-                    tidigaste = [date_tid, plats]
+                pepehandslist.append([date_tid, plats])
+
+            pepehandslist.sort()
 
             file.seek(0)
-            if tidigaste[0] < datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"):
-                send_email(tidigaste)
-                file.truncate()
-                file.write(tidigaste[0].strftime("%Y-%m-%d %H:%M"))
-                print("WIN", tidigaste[0].strftime("%Y-%m-%d %H:%M"))
+
+            for i in pepehandslist:
+                print(i[0].strftime("%Y-%m-%d %H:%M"))
+
+            if pepehandslist[0][0] < datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M"):
+                send_email(pepehandslist[0])
+                file.truncate(0)
+                file.write(pepehandslist[0][0].strftime("%Y-%m-%d %H:%M"))
+                print("WIN", pepehandslist[0][0].strftime("%Y-%m-%d %H:%M"))
             else:
-                print("FAIL", tidigaste[0].strftime("%Y-%m-%d %H:%M"))
+                print("FAIL", pepehandslist[0][0].strftime("%Y-%m-%d %H:%M"))
 
         iterations += 1
-        sleep(60)
+        sleep(10)
 
     driver.quit()
 
